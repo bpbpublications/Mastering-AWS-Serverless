@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="h-100" data-bs-theme="dark">
+  <head>
+    <title>Mastering AWS Book</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body class="d-flex h-100 text-center flex-column">
+    <div class="d-flex w-100 h-100 mx-auto flex-column">
+      <header class="mb-auto">
+        <nav class="navbar">
+          <div class="container-fluid">
+            <div class="col"></div>
+            <div class="col navbar-brand h1 pt-3">
+              Mastering AWS Serverless Book
+            </div>
+            <div class="col text-md-end">
+              <a class="btn btn-primary" href="https://auth.masteringawsserverlessbook.com/logout?client_id={clientId}&logout_uri=https://masteringawsserverlessbook.com/logout.html">
+                  Log Out
+              </a>
+            </div>
+          </div>
+        </nav>
+      </header>   
+      <main role="main" class="my-auto visually-hidden">
+        <div id="is-logged-in" class="container visually-hidden">
+          <h1>My Account</h1>
+          <p id="greeting">Hello {firstName}!</p>
+          <p>
+            <a href="/account/info.html" class="btn btn-primary">Update info</a>
+          </p>
+        </div>
+        <div id="is-logged-out" class="container placeholder-glow">
+          <h1><span class="placeholder col-4"></span></h1>
+          <p><span class="placeholder col-3"></span></p>
+        </div>
+      </main>    
+      <footer class="mt-auto">
+        <div class="container text-center">
+          <p>
+            &copy; Miguel A. Calles. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script type="module" src="auth-check.js"></script>
+  <script>
+    window.onload = function () {
+      const firstName = localStorage.getItem('userFirstName');
+      const greetingEl = document.getElementById('greeting');
+      const updatedGreeting = greetingEl.innerHTML.replace('{firstName}', firstName);
+      greetingEl.innerHTML = updatedGreeting;
+    }
+  </script>
+</html>

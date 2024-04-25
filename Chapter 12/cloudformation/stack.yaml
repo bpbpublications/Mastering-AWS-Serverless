@@ -1,0 +1,45 @@
+Resources:
+  TestBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: masteringawsserverlessbook-created-by-cf
+      VersioningConfiguration: 
+        Status: Enabled
+  HelloWorldRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Description: String
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      RoleName: function-hello-world
+  HelloWorldFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures:
+        - arm64
+      Code:
+        ZipFile: |
+          export const handler = async (event) => {
+            const response = {
+              statusCode: 200,
+              body: JSON.stringify(
+                'Hello world'
+              ),
+            };
+            return response;
+          };
+      FunctionName: hello-world
+      Handler: handler
+      MemorySize: 128
+      Role: !GetAtt HelloWorldRole.Arn
+      Runtime: nodejs20.x
+      Timeout: 3

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" class="h-100" data-bs-theme="dark">
+  <head>
+    <title>Mastering AWS Book</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body class="d-flex h-100 text-center flex-column">
+    <div class="d-flex w-100 h-100 mx-auto flex-column">
+      <header class="mb-auto">
+        <nav class="navbar">
+          <div class="container-fluid">
+            <div class="col"></div>
+            <div class="col navbar-brand h1 pt-3">
+              Mastering AWS Serverless Book
+            </div>
+            <div class="col text-md-end">
+              <div id="is-logged-out-btn" class="visually-hidden">
+                <a class="btn btn-primary" href="https://auth.masteringawsserverlessbook.com/signup?client_id={clientId}&response_type=code&scope=openid+aws.cognito.signin.user.admin&redirect_uri=https://masteringawsserverlessbook.com/auth-callback.html">
+                  Sign Up
+                </a>
+                <a class="btn btn-secondary" href="https://auth.masteringawsserverlessbook.com/login?client_id={clientId}&response_type=code&scope=openid+aws.cognito.signin.user.admin&redirect_uri=https://masteringawsserverlessbook.com/auth-callback.html">
+                  Log In
+                </a>
+              </div>
+              <div id="is-logged-in-btn" class="visually-hidden">
+                <a class="btn btn-primary" href="https://auth.masteringawsserverlessbook.com/logout?client_id={clientId}&logout_uri=https://masteringawsserverlessbook.com/logout.html">
+                  Log Out
+                </a>
+                <a class="btn btn-secondary" href="https://masteringawsserverlessbook.com/account.html">
+                  My Account
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>   
+      <main role="main" class="my-auto">
+        <div class="container">
+          <h1>Chapters</h1>
+          <div id="chapters">
+            <div class="card my-5" aria-hidden="true">
+              <div class="card-body">
+                <h2 class="card-title placeholder-glow">
+                  <span class="placeholder col-6"></span>
+                </h2>
+                <p class="card-text placeholder-glow">
+                  <span class="placeholder col-7"></span>
+                </p>
+              </div>
+            </div>
+            <div class="card my-5" aria-hidden="true">
+              <div class="card-body">
+                <h2 class="card-title placeholder-glow">
+                  <span class="placeholder col-6"></span>
+                </h2>
+                <p class="card-text placeholder-glow">
+                  <span class="placeholder col-7"></span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>    
+      <footer class="mt-auto">
+        <div class="container text-center">
+          <p>
+            &copy; Miguel A. Calles. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script>
+    window.onload = function () {
+      console.error('onload');
+      const url = 'https://api.masteringawsserverlessbook.com/chapters';
+      const chaptersDiv = document.getElementById('chapters');
+      const errorHtml = '<div class="alert alert-danger" role="alert">' +
+        'Failed to get the chapters.</div>';
+      const noneHtml = '<p>No chapters found.</p>';
+      const chapterHtml = '<div class="card my-5" aria-hidden="true">' + 
+        '<div class="card-body">' +
+        '<h2 class="card-title">{title}</h2>' +
+        '<p class="card-text">{description}</p>' +
+        '</div>' +
+        '</div>';
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            var responseData = JSON.parse(xhr.responseText);
+            if (Array.isArray(responseData) && responseData.length > 0) {
+              chaptersDiv.innerHTML = '';
+              for (let chapter of responseData) {
+                chaptersDiv.innerHTML += chapterHtml.replace('{title}', chapter.title)
+                  .replace('{description}', chapter.description);
+              }
+            } else {
+              chaptersDiv.innerHTML = noneHtml;
+            }
+          } else {
+            chaptersDiv.innerHTML = errorHtml;
+            console.error('Request failed with status:', xhr.status);
+          }
+        };
+        xhr.send();
+      } catch (e) {
+        chaptersDiv.innerHTML = errorHtml;
+        console.error('Exception:', e);
+      }
+      /* check jwt */
+      const jwt = localStorage.getItem('jwt');
+      if (jwt) {
+        document.getElementById('is-logged-out-btn')
+          .classList.add('visually-hidden');
+        document.getElementById('is-logged-in-btn')
+          .classList.remove('visually-hidden');
+      } else {
+        document.getElementById('is-logged-out-btn')
+          .classList.remove('visually-hidden');
+        document.getElementById('is-logged-in-btn')
+          .classList.add('visually-hidden');
+      }
+    }
+  </script>
+</html>

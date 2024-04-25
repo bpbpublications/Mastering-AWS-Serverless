@@ -1,0 +1,37 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "iam:PassRole",
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents",
+        "sagemaker:CreateModel",
+        "sagemaker:CreateEndpointConfig",
+        "sagemaker:DescribeTrainingJob",
+        "sagemaker:CreateTrainingJob",
+        "ssm:PutParameter",
+        "ssm:GetParameter"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-east-1:{accountId}:log-group::log-stream:/aws/sagemaker/TrainingJobs:log-stream:*",
+        "arn:aws:logs:us-east-1:{accountId}:log-group:/aws/sagemaker/TrainingJobs",
+        "arn:aws:sagemaker:us-east-1:{accountId}:endpoint-config/*",
+        "arn:aws:sagemaker:us-east-1:{accountId}:training-job/*",
+        "arn:aws:sagemaker:us-east-1:{accountId}:model/*",
+        "arn:aws:ssm:us-east-1:{accountId}:parameter/function-sagemaker-rcf/*"
+      ]
+    },
+    {
+      "Sid": "VisualEditor1",
+      "Effect": "Allow",
+      "Action": [
+          "s3:GetObject",
+          "s3:PutObject"
+        ],
+      "Resource": "arn:aws:s3:::masteringawsserverlessbook-data/rcf/*"
+    }
+  ]
+}
